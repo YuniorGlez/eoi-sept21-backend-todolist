@@ -13,6 +13,10 @@ const schema = new mongoose.Schema({
         minlength: 5,
         maxlength: 100,
         unique : true
+    },
+    password : {
+        required: true,
+        type: String
     }
 }, { timestamps: true })
 

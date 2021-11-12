@@ -47,8 +47,25 @@ app.post('/login', function (req, res) {
         })
 });
 
+
+app.get('/me', function (req, res) {
+    const authorization = req.headers.authorization;
+    if (!authorization){ 
+        return res.status(403).send('No tienes token jodiuh')
+    }
+    const token = authorization.split(' ')[1];
+    if (!token){ 
+        return res.status(403).send('No tienes token jodiuh')
+    }
+    jwt.verify(token, "cLfdA^%MEwFY9Q#n", (err, dataStored) => {
+        if (err) return res.sendStatus(403)
+        return res.status(200).json(dataStored.usuario)
+    })
+});
+
+
 const todosRouter = require('./api/todos/todos.router')
-app.use('/todos', todosRouter)
+app.use('/todos', auth.isLogged , todosRouter)
 
 const usersRouter = require('./api/users/users.router')
 app.use('/users', auth.isLogged ,  usersRouter)
